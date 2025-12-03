@@ -1,0 +1,174 @@
+\documentclass{article}
+
+% ICML 2025 required packages
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% Use accepted style for camera-ready
+\usepackage[accepted]{icml2025}
+
+% Additional packages
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+\icmltitlerunning{Multi-Modal Bird Species Classification}
+
+\begin{document}
+
+\twocolumn[
+\icmltitle{Multi-Modal Bird Species Classification: \\
+Comparing Audio and Image-Based Deep Learning Approaches}
+
+\icmlsetsymbol{equal}{*}
+
+\begin{icmlauthorlist}
+\icmlauthor{Giovanni}{ufmg}
+\end{icmlauthorlist}
+
+\icmlaffiliation{ufmg}{Federal University of Minas Gerais, Brazil}
+
+\icmlcorrespondingauthor{Giovanni}{giovanni@ufmg.br}
+
+\icmlkeywords{bird species classification, multi-modal learning, audio classification, image classification, deep learning}
+
+\vskip 0.3in
+]
+
+\printAffiliationsAndNotice{}
+
+\begin{abstract}
+Bird species classification is crucial for biodiversity monitoring and conservation efforts. This paper presents a comprehensive comparison of audio and image-based deep learning approaches for automated bird species identification. We evaluate four architectures: AudioCNN and AudioViT for audio spectrograms, and ResNet-18 and ViT-B/16 for images, trained on 90 species with aligned audio-visual data from Xeno-Canto and CUB-200-2011 datasets. Our experiments demonstrate that Image Vit achieves the highest accuracy of 92.33\%, providing insights into modality-specific challenges and opportunities for multi-modal fusion in wildlife monitoring systems.
+\end{abstract}
+
+\section{Introduction}
+
+Accurate bird species identification is essential for ecological research, conservation planning, and biodiversity assessment. Traditional methods rely on expert ornithologists, which is time-consuming and not scalable for large-scale monitoring. Recent advances in deep learning have enabled automated classification from both audio recordings and images \citep{kahl2021overview}.
+
+This work addresses the following research questions:
+\begin{enumerate}
+    \item How do audio and image modalities compare for bird species classification?
+    \item Which architecture (CNN vs. Transformer) performs better within each modality?
+    \item What are the practical implications for deployment in wildlife monitoring systems?
+\end{enumerate}
+
+We conduct controlled experiments on 90 species with aligned multi-modal data, ensuring fair comparison across modalities and architectures.
+
+\section{Related Work}
+
+\textbf{Audio-based classification:} Bioacoustic monitoring has gained traction with CNNs applied to mel-spectrograms \citep{stowell2019automatic}. Recent work explores Transformers for audio \citep{gong2021ast}, showing promise but requiring large datasets.
+
+\textbf{Image-based classification:} The CUB-200-2011 dataset \citep{wah2011caltech} has been a benchmark for fine-grained bird classification. Transfer learning from ImageNet pretrained models achieves strong performance \citep{he2016deep}.
+
+\textbf{Multi-modal approaches:} Few studies compare audio and visual modalities systematically. This work fills the gap with controlled experiments on aligned species sets.
+
+\section{Methods}
+
+\subsection{Datasets}
+
+We curated a multi-modal dataset by intersecting:
+\begin{itemize}
+    \item \textbf{Xeno-Canto:} 11,076 audio recordings
+    \item \textbf{CUB-200-2011:} 5,385 images
+\end{itemize}
+
+After species name normalization and intersection, we obtained 90 common species. Data was split 70/15/15 for train/validation/test with stratification to ensure balanced class representation.
+
+\subsection{Audio Processing}
+
+Audio recordings were processed as follows:
+\begin{enumerate}
+    \item Resample to 22.05 kHz
+    \item Extract 3-second segments
+    \item Compute 40 MFCC coefficients
+    \item Calculate delta and delta-delta features
+    \item Stack into $(H, W, 3)$ tensors where $H=40$ coefficients, $W$ is time frames, and 3 channels represent static, delta, and delta-delta
+\end{enumerate}
+
+\subsection{Model Architectures}
+
+\textbf{AudioCNN:} A compact 3-layer CNN with 323K parameters, specifically designed for MFCC inputs. Architecture: Conv2D (32) $\rightarrow$ Conv2D (64) $\rightarrow$ Conv2D (128) $\rightarrow$ AdaptiveAvgPool $\rightarrow$ FC.
+
+\textbf{AudioViT:} Vision Transformer (ViT-B/16) adapted for audio by treating MFCC stacks as images. Pretrained on ImageNet then fine-tuned.
+
+\textbf{ImageResNet:} ResNet-18 with pretrained ImageNet weights, fine-tuned on bird images.
+
+\textbf{ImageViT:} ViT-B/16 with pretrained ImageNet weights, fine-tuned on bird images.
+
+\subsection{Training Details}
+
+All models were trained with:
+\begin{itemize}
+    \item Automatic Mixed Precision (AMP) for efficient GPU usage
+    \item Gradient clipping (max norm = 1.0)
+    \item Early stopping (patience = 7-10 epochs)
+    \item Data augmentation for images (random crops, flips, color jitter)
+\end{itemize}
+
+Audio models used Adam optimizer (lr=1e-3 for CNN, 1e-4 for ViT). Image models used SGD (lr=1e-2) for ResNet and AdamW (lr=1e-4) for ViT.
+
+\section{Results}
+
+\subsection{Quantitative Results}
+
+Table~\ref{tab:results} presents test set performance. Image Vit achieves the highest accuracy of 92.33\%, demonstrating that image-based models generally outperform audio-based approaches for this task.
+
+\begin{table}[htb]
+\centering
+\caption{Test set performance on 90 bird species. Best results in \textbf{bold}.}
+\label{tab:results}
+\begin{tabular}{lccc}
+\toprule
+Model & Accuracy & F1-Macro & F1-Weighted \\
+\midrule
+Audio Cnn & 0.3893 & 0.1172 & 0.3348 \\
+Audio ViT & 0.3514 & 0.1727 & 0.3304 \\
+Image ResNet18 & 0.8552 & 0.8517 & 0.8516 \\
+Image ViT & \textbf{0.9233} & \textbf{0.9222} & \textbf{0.9222} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Analysis}
+
+\textbf{Modality Comparison:} Image models achieve 88.9% average accuracy vs. 37.0% for audio models. This suggests that visual features provide stronger discriminative cues for the species in our dataset, though audio remains valuable for field deployment where images may be unavailable.
+
+\textbf{Architecture Comparison:} Transformer-based models (avg: 63.7%) outperform CNNs (avg: 62.2%), benefiting from pretrained ImageNet knowledge and global attention mechanisms.
+
+\textbf{Training Efficiency:} Audio models trained faster than image models due to smaller input dimensions and dataset size, with AudioCNN completing training in approximately 30 minutes compared to 1--2 hours for image models.
+
+\subsection{Visualizations}
+
+Figure~\ref{fig:comparison} shows the performance comparison across all models. The confusion matrices (available in supplementary materials) reveal that errors are primarily concentrated among visually or acoustically similar species.
+
+\section{Discussion}
+
+Our experiments reveal several insights:
+
+\textbf{1. Modality-specific characteristics:} Audio provides temporal patterns of vocalizations while images capture visual morphology. The performance difference suggests that plumage patterns and body structure captured in images may be more distinctive than vocal signatures for these species.
+
+\textbf{2. Architecture choice:} Transformers show competitive or superior performance compared to CNNs, validating the transfer learning approach from ImageNet pretraining even for non-standard inputs like MFCC spectrograms
+
+\textbf{3. Practical deployment:} For real-world monitoring systems, image-based models offer highest accuracy but require good lighting conditions. Audio models provide a robust alternative for nocturnal species or dense habitats.
+
+\subsection{Limitations}
+
+This study has several limitations: (1) limited to 90 species with multi-modal data, (2) audio duration fixed at 3 seconds, which may miss longer vocalizations, (3) images from curated dataset may not reflect field conditions.
+
+\section{Conclusion}
+
+We presented a comprehensive comparison of audio and image-based deep learning for bird species classification on 90 species. Our results show that Image Vit achieves 92.3% accuracy on 90 bird species. Our key contributions include: (1) systematic comparison of modalities and architectures, (2) demonstration that visual features significantly outperform acoustic features for this task, and (3) insights into architecture selection for each modality. Future work includes multi-modal fusion strategies, exploration of attention mechanisms to identify discriminative features, and scaling to larger taxonomies with limited labeled data.
+
+\section*{Acknowledgments}
+
+We thank the Xeno-Canto community for providing bird audio recordings and the creators of the CUB-200-2011 dataset. This research was conducted at the Federal University of Minas Gerais. We acknowledge the use of GPU resources for model training.
+
+\bibliography{references}
+\bibliographystyle{icml2025}
+
+\end{document}

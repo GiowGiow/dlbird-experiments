@@ -1,50 +1,116 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# SpeckitDLBird Constitution
+<!-- Short ICML-style bird classification project constitution -->
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### I. Reproducibility-First
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+All experiments must be fully reproducible: deterministic seeds, pinned dependencies managed with UV, versioned datasets/artifacts, and executable notebooks. Each result in the paper maps to a specific notebook and commit.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+<!-- Deterministic runs, environment pinning, and data versioning are mandatory. -->
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### II. Clean, Concise Code with Documentation
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+Code and notebooks must be minimal, readable, and documented inline. Each deep learning architecture includes a brief design rationale and clear hyperparameters. Experiments are described in notebook markdown cells.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+<!-- Clarity over cleverness; comments explain "why" not just "what". -->
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### III. Data Ethics and Compliance
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+We only use bird image datasets with appropriate licenses; no personally identifiable information. Attributions and licenses are recorded; dataset splits avoid leakage.
+
+<!-- Ethics statement is included per ICML 2025 requirements. -->
+
+### IV. Results Traceability
+
+Each table/figure in the ICML paper corresponds to a notebook section and saved artifact path. Figures are generated programmatically and saved with unique, descriptive filenames.
+
+<!-- Notebooks produce figures/tables deterministically with timestamps and seeds. -->
+
+### V. Simplicity and Baselines
+
+Start with strong classical and simple CNN baselines before complex models. Report ablations sparingly to fit a short 4-page limit.
+
+<!-- YAGNI: include only what improves clarity and insight. -->
+
+## Paper Requirements (ICML 2025 Short, 4 pages)
+
+The article follows the ICML 2025 template (neurips-like style if applicable) with the following minimal sections:
+
+1. Title and Authors: concise, descriptive title; affiliations; contact.
+1. Abstract (≤150 words): task, dataset(s), methods (baseline + DL), key results.
+1. Introduction (½ page): motivation for bird classification; contributions in bullet form.
+1. Related Work (½ page): brief coverage of bird classification and lightweight CNNs/transformers.
+
+1. Method (1 page):
+
+- Dataset description and splits.
+- Baseline: linear SVM on frozen features (e.g., ResNet-18 pretrained) or simple k-NN.
+- Deep Learning: small CNN and/or MobileNetV3/ResNet-18 fine-tuning; architecture summary and training setup.
+- Losses, metrics, and evaluation protocol.
+
+
+1. Experiments (1 page):
+
+- Training details: UV environment, seeds, batch size, lr schedule.
+- Results: accuracy, macro-F1; tables created from notebook outputs.
+- Ablations: minimal (e.g., input resolution, augmentation on/off).
+
+
+1. Discussion/Conclusion (½ page): key insights and limitations.
+1. Ethics Statement: data licensing, animal welfare considerations.
+1. Reproducibility Checklist: environment, data sources, code release, seeds.
+1. References: concise, relevant citations.
+
+Formatting constraints:
+
+- Main text ≤4 pages; references may exceed. Figures and tables counted in the 4-page limit.
+- Use the ICML 2025 LaTeX template; no font or spacing changes.
+- Provide source of figures and tables and ensure legibility.
+
+## Development Workflow, Experiments, and Notebooks
+
+We use multiple Jupyter notebooks, each focused and self-contained. UV manages Python packages and lockfiles.
+
+Notebook plan (names and purposes):
+
+- 01_data_prep.ipynb: download/verify dataset licensing; create stratified splits; basic EDA and class distribution.
+- 02_features_baseline.ipynb: extract pretrained features; train SVM/k-NN baseline; report metrics.
+- 03_cnn_finetune.ipynb: fine-tune lightweight CNN (ResNet-18/MobileNetV3); log training curves and best metrics.
+- 04_ablations.ipynb: small ablations (image size, augmentation); summarize impact.
+- 05_figures_tables.ipynb: consolidate results, generate paper-ready tables and figures.
+
+Environment management (UV):
+
+- uv init; uv add torch torchvision torchaudio timm scikit-learn numpy pandas matplotlib seaborn jupyter ipykernel rich
+- Lock all deps; record Python version; create kernel with the env name.
+- Store exact uv commands and versions in 00_env_setup.md and notebooks’ first cell.
+
+Architecture documentation:
+
+- For each DL model, include a markdown cell with: input size, backbone, number of params (estimate), optimizer, lr schedule, regularization, augmentation, epochs.
+- Provide a short “why this design” rationale emphasizing simplicity and efficiency.
+
+Experiment metadata:
+
+- Set seeds (e.g., 42) for numpy, torch, and dataloaders; enable cudnn deterministic where applicable.
+- Save artifacts under `artifacts/` with run identifiers; log config JSON next to checkpoints.
 
 ## Governance
 <!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes ad-hoc practices for this project. Amendments require:
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+1. A short proposal documenting the change and rationale.
+2. Review by project maintainers.
+3. Migration plan for affected notebooks, figures, and artifacts.
+
+Compliance rules:
+
+- All PRs verify paper section completeness and notebook-to-result mapping.
+- Complexity must be justified within the 4-page constraint.
+- Use `GUIDANCE.md` for runtime guidance and `README.md` for quickstart.
+
+**Version**: 0.1.0 | **Ratified**: 2025-12-03 | **Last Amended**: 2025-12-03
+<!-- Initial version aligned to ICML 2025 short paper requirements -->
