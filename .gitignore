@@ -46,6 +46,7 @@ Thumbs.db
 
 # Project specific
 artifacts/checkpoints/*.pth
+artifacts/models/**/*.pth
 artifacts/audio_mfcc_cache/**/*.npy
 data/ssw60/
 *.parquet
