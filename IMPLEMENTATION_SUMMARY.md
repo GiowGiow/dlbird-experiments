@@ -17,7 +17,7 @@
 - Created comprehensive directory structure
 - Set up source modules in `src/`
 - Created Jupyter notebooks in `notebooks/`
-- Configured artifacts and paper directories
+- Configured artifacts
 
 ### 3. Core Utilities ✅
 
@@ -115,7 +115,6 @@ Created 6 comprehensive notebooks:
 3. **02_audio_features.ipynb**: MFCC extraction and caching
 4. **03_image_models.ipynb**: Image dataset preparation and manifests
 5. **04_training_compare.ipynb**: Model training and comparison framework
-6. **05_results_paper.ipynb**: Results aggregation and analysis
 
 ### 10. Documentation ✅
 
@@ -169,7 +168,6 @@ All core functionality tested and verified:
    - Logs printed during training
 
 4. **Analyze results**:
-   - Run 05_results_paper.ipynb
    - Review metrics in `artifacts/results/`
 
 ### Optional enhancements:

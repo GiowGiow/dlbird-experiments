@@ -19,7 +19,6 @@ This document lists actionable tasks for running CNN and ViT experiments across 
   - `02_audio_features.ipynb`
   - `03_image_models.ipynb`
   - `04_training_compare.ipynb`
-  - `05_results_paper.ipynb`
 - Include markdown outlines and initial code stubs.
 
 ## 3. Index Xeno-Canto metadata

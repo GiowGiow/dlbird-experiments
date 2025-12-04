@@ -55,10 +55,7 @@ Successfully completed a comprehensive comparison of audio and image-based deep 
   - Accuracy, F1-macro, F1-weighted computed
   - Confusion matrices generated (90×90 classes)
   - Model comparison plots created
-  
-- [x] **Task 13:** Papers written
-  - LaTeX paper (ICML 2025 format): `paper/icml2025_bird_classification.tex`
-  - Markdown paper: `paper/bird_classification_paper.md`
+
 
 ---
 
@@ -82,14 +79,6 @@ artifacts/results/
 ├── image_resnet18_results.json + confusion_matrix.png
 ├── image_vit_results.json + confusion_matrix.png
 └── model_comparison.png
-```
-
-### Papers
-```
-paper/
-├── icml2025_bird_classification.tex (LaTeX source)
-├── bird_classification_paper.md (Markdown version)
-└── references.bib
 ```
 
 ### Datasets
@@ -176,10 +165,6 @@ nohup uv run python scripts/04_train_image.py > artifacts/image_training.log 2>&
 # 4. Evaluate
 uv run python scripts/05_evaluate.py
 
-# 5. Generate paper
-uv run python scripts/06_generate_paper.py
-uv run python scripts/07_generate_markdown_paper.py
-```
 
 ### Environment
 ```bash
@@ -195,7 +180,6 @@ uv run python --version  # Python 3.12.8
 - [x] 4 models trained and saved
 - [x] Test set evaluation performed
 - [x] Results documented in JSON + visualizations
-- [x] Papers written (LaTeX + Markdown)
 - [x] Code clean and reproducible
 - [x] Datasets indexed and filtered
 - [x] Training curves and confusion matrices generated
@@ -209,7 +193,6 @@ uv run python --version  # Python 3.12.8
 | Models Trained | 4 | 4 | ✅ |
 | Test Accuracy (Best) | >80% | 92.33% | ✅✅ |
 | Evaluation Metrics | 3 | 3 (Acc, F1-macro, F1-weighted) | ✅ |
-| Paper Sections | 5+ | 6 (Intro, Methods, Results, Discussion, Conclusion, Refs) | ✅ |
 | Reproducibility | Full | All scripts + checkpoints available | ✅ |
 
 ---
@@ -224,7 +207,7 @@ If using this work, please cite:
 ---
 
 **Project Completed:** December 3, 2025  
-**Total Time:** Data indexing → Training → Evaluation → Paper (~4-5 hours)  
+**Total Time:** Data indexing → Training → Evaluation
 **GPU Usage:** ~3-4 hours on CUDA-enabled GPU  
 **Dataset Size:** 16,461 samples across 90 species  
 **Best Model:** ViT-B/16 (92.33% accuracy) 🎯

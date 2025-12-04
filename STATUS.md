@@ -35,7 +35,6 @@ speckitdlbird/
 │   └── utils/        # 3 modules (species, splits)
 ├── notebooks/        # 6 experiment notebooks
 ├── artifacts/        # Generated outputs
-├── paper/           # LaTeX paper infrastructure
 ├── tests/           # Verification scripts
 └── docs/            # Documentation
 ```
@@ -147,7 +146,6 @@ ImageResNet-18: 11,181,642 parameters
 ⏳ Mount datasets (external drive)
 ⏳ Run notebooks 00-05 in sequence
 ⏳ Train models (~2-6 hours/model)
-⏳ Generate paper
 
 ### Expected Outputs
 📊 Trained model checkpoints
@@ -172,10 +170,6 @@ ImageResNet-18: 11,181,642 parameters
    - Check `artifacts/checkpoints/` for model saves
    - Check `artifacts/metrics/` for results
    - Review training logs in notebook outputs
-
-4. **Generate paper**:
-   - Run notebook 05
-   - Compile LaTeX in `paper/` directory
 
 ## Known Limitations
 

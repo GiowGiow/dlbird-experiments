@@ -43,7 +43,7 @@ This plan follows the chosen stack: Python, UV for package management, PyTorch e
 - `02_audio_features.ipynb`: MFCC static/delta/delta-delta extraction and caching.
 - `03_image_models.ipynb`: image preprocessing and dataset construction.
 - `04_training_compare.ipynb`: train CNN/ViT on audio and images; checkpoint and evaluate.
-- `05_results_paper.ipynb`: aggregate results and generate analysis.
+- `05_results.ipynb`: aggregate results and generate analysis.
 
 ## Data Processing
 

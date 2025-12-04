@@ -25,54 +25,6 @@ xc_df.to_parquet(ARTIFACTS / 'xeno_canto_index.parquet', index=False, engine='py
 
 ---
 
-### 2. Updated Paper Generation to Use ICML 2025 Template
-
-**Changes Made:**
-- Updated `scripts/06_generate_paper.py` to follow official ICML 2025 template structure
-- Used `\usepackage[accepted]{icml2025}` for camera-ready version
-- Improved table formatting with bold highlighting of best results
-- Enhanced paper structure with proper ICML commands:
-  - `\icmltitlerunning{}`
-  - `\icmlauthor{}`, `\icmlaffiliation{}`
-  - `\icmlcorrespondingauthor{}`
-  - `\icmlkeywords{}`
-- Added figure placeholders and improved content flow
-- Updated bibliography to use `\bibliographystyle{icml2025}`
-
-**Output:** `paper/icml2025_bird_classification.tex`
-
-**Key Features:**
-- Proper ICML 2025 formatting
-- Two-column layout with title block
-- Tables with best results highlighted in bold
-- Comprehensive sections: Abstract, Intro, Related Work, Methods, Results, Discussion, Conclusion
-- Professional references with BibTeX
-
----
-
-## 📄 Generated Files
-
-### Paper Files
-```
-paper/
-├── icml2025_bird_classification.tex  (ICML 2025 formatted LaTeX)
-├── bird_classification_paper.md      (Markdown version for easy reading)
-└── references.bib                    (BibTeX references)
-```
-
-### To Compile the LaTeX Paper
-```bash
-cd paper/
-pdflatex icml2025_bird_classification.tex
-bibtex icml2025_bird_classification
-pdflatex icml2025_bird_classification.tex
-pdflatex icml2025_bird_classification.tex
-```
-
-**Note:** The LaTeX template requires `icml2025.sty` style file. If not available, the template structure is correct and can be compiled once the style file is obtained from ICML 2025 submission portal.
-
----
-
 ## 🎯 Final Results Summary
 
 ### Model Performance (90 Species, Test Set)
@@ -95,24 +47,6 @@ pdflatex icml2025_bird_classification.tex
 ## ✅ Verification Checklist
 
 - [x] Intersection notebook fixed (PyArrow import issue resolved)
-- [x] Paper uses proper ICML 2025 template structure
-- [x] LaTeX compiles with correct formatting commands
 - [x] Results table highlights best performance in bold
 - [x] All 4 models evaluated and documented
 - [x] References properly formatted with BibTeX
-- [x] Markdown paper available for easy reading
-
----
-
-## 📝 Next Steps (Optional)
-
-If you want to compile the PDF:
-1. Obtain `icml2025.sty` from ICML 2025 conference website
-2. Place it in the `paper/` directory
-3. Run the compilation commands above
-
-Alternatively, the Markdown version (`paper/bird_classification_paper.md`) is immediately readable and contains all results.
-
----
-
-**All requested fixes completed successfully!** ✨

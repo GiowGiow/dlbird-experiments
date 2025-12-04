@@ -38,13 +38,11 @@ I've transformed the notebooks to contain the actual implementation code from th
   - Early stopping and checkpointing
   - Training curve visualization
 
-### ⏳ **05_results_paper.ipynb** (Needs completion)
-- Should contain code from `scripts/05_evaluate.py` and `scripts/06_generate_paper.py`
+### ⏳ **05_results.ipynb** (Needs completion)
 - Needs to include:
   - Model evaluation on test sets
   - Confusion matrix generation
   - Metrics aggregation
-  - LaTeX paper generation
 
 ## Script → Notebook Mapping
 
@@ -54,24 +52,8 @@ I've transformed the notebooks to contain the actual implementation code from th
 | `02_splits_and_features.py` | `02_audio_features.ipynb` | Splits + MFCC extraction |
 | `03_train_audio.py` | `04_training_compare.ipynb` | Audio model training |
 | `04_train_image.py` | `03_image_models.ipynb` | Image model training |
-| `05_evaluate.py` | `05_results_paper.ipynb` | Model evaluation |
-| `06_generate_paper.py` | `05_results_paper.ipynb` | Paper generation |
 
 ## What Still Needs to Be Done
-
-### **05_results_paper.ipynb** 
-This notebook needs to be rebuilt with evaluation and paper generation code from:
-- `scripts/05_evaluate.py` - Model evaluation, confusion matrices, metrics
-- `scripts/06_generate_paper.py` - ICML 2025 LaTeX paper generation
-
-The notebook should contain cells for:
-1. Load all 4 trained models (audio_cnn, audio_vit, image_resnet18, image_vit)
-2. Evaluate each on test sets
-3. Generate confusion matrices
-4. Aggregate metrics
-5. Create visualizations (accuracy comparison, training curves comparison)
-6. Generate ICML 2025 formatted LaTeX paper
-7. Save results
 
 ## Key Changes Made
 
@@ -147,13 +129,6 @@ plt.show()
 4. **Debugging**: Easier to identify and fix issues cell-by-cell
 5. **Experimentation**: Can easily modify hyperparameters and rerun
 
-## Next Steps
-
-1. Complete `05_results_paper.ipynb` with evaluation and paper generation code
-2. Run all notebooks sequentially to verify the full pipeline
-3. Consider removing the standalone scripts or keeping them as "batch processing" alternatives
-4. Add markdown cells explaining each step for better documentation
-
 ## Files Modified
 
 ### Notebooks Updated:
@@ -161,7 +136,6 @@ plt.show()
 - ✅ `notebooks/02_audio_features.ipynb`  
 - ✅ `notebooks/03_image_models.ipynb`
 - ✅ `notebooks/04_training_compare.ipynb`
-- ⏳ `notebooks/05_results_paper.ipynb` (pending)
 
 ### Scripts (Source Material):
 - `scripts/01_run_indexing.py`
@@ -169,6 +143,5 @@ plt.show()
 - `scripts/03_train_audio.py`
 - `scripts/04_train_image.py`
 - `scripts/05_evaluate.py`
-- `scripts/06_generate_paper.py`
 
 The notebooks now represent the **primary development environment** with full implementation code, not just result viewers.

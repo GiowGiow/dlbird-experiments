@@ -45,7 +45,6 @@ Run notebooks in order:
 3. `02_audio_features.ipynb` - Extract and cache MFCC features
 4. `03_image_models.ipynb` - Prepare image datasets
 5. `04_training_compare.ipynb` - Train all models
-6. `05_results_paper.ipynb` - Analyze results
 
 ### 4. Monitor Progress
 
@@ -100,7 +99,6 @@ jupyter notebook notebooks/
 # See 04_training_compare.ipynb for examples
 
 # Analyze results
-# Run 05_results_paper.ipynb
 ```
 
 ## Expected Timeline

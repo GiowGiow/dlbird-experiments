@@ -34,7 +34,6 @@ speckitdlbird/
 │   ├── 02_audio_features.ipynb
 │   ├── 03_image_models.ipynb
 │   ├── 04_training_compare.ipynb
-│   └── 05_results_paper.ipynb
 ├── artifacts/              # Generated artifacts
 │   ├── checkpoints/        # Model checkpoints
 │   ├── splits/             # Train/val/test splits
@@ -42,10 +41,6 @@ speckitdlbird/
 │   ├── metrics/            # Evaluation metrics
 │   └── env.json            # Environment versions
 ├── data/                   # Working data directory
-├── paper/                  # LaTeX paper
-│   ├── figures/            # Publication figures
-│   ├── tables/             # LaTeX tables
-│   └── output/             # Compiled PDF
 └── README.md
 
 ## Setup
@@ -117,12 +112,6 @@ Run `04_training_compare.ipynb` to:
 - Train Image ViT on CUB-200-2011
 - Evaluate all models and save metrics
 
-### 6. Results Analysis
-
-Run `05_results_paper.ipynb` to:
-- Aggregate metrics from all experiments
-- Generate comparison tables and figures
-- Analyze model performance across datasets
 
 ## Models
 
