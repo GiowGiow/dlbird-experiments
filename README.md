@@ -6,11 +6,10 @@ A comprehensive bird species classification system using both images and audio (
 
 ```
 speckitdlbird/
-├── src/                     # Source code
+├── src/                    # Source code
 │   ├── data/               # Dataset indexing modules
-│   │   ├── xeno_canto.py  # Xeno-Canto audio indexing
+│   │   ├── xeno_canto.py   # Xeno-Canto audio indexing
 │   │   ├── cub.py          # CUB-200-2011 image indexing
-│   │   └── ssw60.py        # SSW60 dataset extraction
 │   ├── features/           # Feature extraction
 │   │   └── audio.py        # MFCC extraction and caching
 │   ├── datasets/           # PyTorch datasets
