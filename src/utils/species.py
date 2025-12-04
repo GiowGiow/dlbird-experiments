@@ -5,7 +5,7 @@ datasets, handling variations in nomenclature, authorship, and formatting.
 """
 
 import re
-from typing import Dict, Set, List
+from typing import Dict, Set
 import pandas as pd
 
 
@@ -80,31 +80,28 @@ def build_species_mapping(
 
 
 def normalize_species_names(
-    xeno_canto_df: pd.DataFrame, cub_df: pd.DataFrame, ssw60_df: pd.DataFrame
+    xeno_canto_df: pd.DataFrame, cub_df: pd.DataFrame
 ) -> Dict[str, Dict[str, str]]:
     """Normalize species names across all datasets and create mappings.
 
     Args:
         xeno_canto_df: Xeno-Canto index DataFrame
         cub_df: CUB-200 index DataFrame
-        ssw60_df: SSW60 index DataFrame
 
     Returns:
-        Dictionary with keys 'xeno_canto', 'cub', 'ssw60' containing
+        Dictionary with keys 'xeno_canto', 'cub' containing
         normalized -> original mappings for each dataset
     """
     # Build mappings for each dataset
     mappings = {
         "xeno_canto": build_species_mapping(xeno_canto_df, "species"),
         "cub": build_species_mapping(cub_df, "species"),
-        "ssw60": build_species_mapping(ssw60_df, "species"),
     }
 
     # Add normalized names to DataFrames (in-place)
     for df_name, df in [
         ("xeno_canto", xeno_canto_df),
         ("cub", cub_df),
-        ("ssw60", ssw60_df),
     ]:
         if "species" in df.columns:
             df["species_normalized"] = df["species"].apply(normalize_species_name)

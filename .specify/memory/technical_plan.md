@@ -1,6 +1,6 @@
 # Technical Implementation Plan: Bird Species Classification (Images + Audio)
 
-This plan follows the chosen stack: Python, UV for package management, PyTorch ecosystem (torch/torchvision/torchaudio), transformers/timm for ViT, librosa for audio features, scikit-learn for metrics, and Jupyter notebooks for experiments. It implements CNN and ViT models for both audio (MFCC stacks) and images, across the intersection of Xeno-Canto and CUB-200-2011, and separately on SSW60.
+This plan follows the chosen stack: Python, UV for package management, PyTorch ecosystem (torch/torchvision/torchaudio), transformers/timm for ViT, librosa for audio features, scikit-learn for metrics, and Jupyter notebooks for experiments. It implements CNN and ViT models for both audio (MFCC stacks) and images, using the intersection of Xeno-Canto and CUB-200-2011 datasets.
 
 ## Contract
 
@@ -11,7 +11,7 @@ This plan follows the chosen stack: Python, UV for package management, PyTorch e
 - Outputs:
   - Artifacts: cached MFCC tensors, preprocessed image datasets, checkpoints, logs.
   - Metrics: accuracy, macro-F1, per-class stats, confusion matrices, plots.
-  - 4-page LaTeX PDF article using ICML 2025 template.
+  - Results analysis and summaries.
 
 - Error modes:
   - Missing files/metadata, species mismatches, invalid audio/image files, CUDA unavailability.
@@ -24,8 +24,7 @@ This plan follows the chosen stack: Python, UV for package management, PyTorch e
 - Xeno-Canto part 1 (A–M v11): `/media/giovanni/TOSHIBA EXT/dlbird/datasets/datasets/rohanrao/xeno-canto-bird-recordings-extended-a-m/versions/11`
 - Xeno-Canto part 2 (N–Z v11): `/media/giovanni/TOSHIBA EXT/dlbird/datasets/datasets/rohanrao/xeno-canto-bird-recordings-extended-n-z/versions/11`
 - CUB-200-2011 v7: `/media/giovanni/TOSHIBA EXT/dlbird/datasets/datasets/wenewone/cub2002011/versions/7`
-- SSW60 tarball: `/media/giovanni/TOSHIBA EXT/dlbird/datasets/mixed/ssw60.tar.gz`
-- Working directories: `data/`, `artifacts/`, `paper/`
+- Working directories: `data/`, `artifacts/`
 
 ## UV Environment
 
@@ -40,11 +39,11 @@ This plan follows the chosen stack: Python, UV for package management, PyTorch e
 ## Notebooks Overview
 
 - `00_env_setup.ipynb`: environment checks, seeds, versions.
-- `01_intersection.ipynb`: index/normalize species and compute Xeno-Canto ∩ CUB; derive SSW60 species list.
+- `01_intersection.ipynb`: index/normalize species and compute Xeno-Canto ∩ CUB intersection.
 - `02_audio_features.ipynb`: MFCC static/delta/delta-delta extraction and caching.
 - `03_image_models.ipynb`: image preprocessing and dataset construction.
 - `04_training_compare.ipynb`: train CNN/ViT on audio and images; checkpoint and evaluate.
-- `05_results_paper.ipynb`: aggregate results; generate LaTeX and build PDF.
+- `05_results_paper.ipynb`: aggregate results and generate analysis.
 
 ## Data Processing
 
@@ -52,14 +51,12 @@ This plan follows the chosen stack: Python, UV for package management, PyTorch e
 
 - Xeno-Canto v11: read metadata CSV/JSON (fields: species/common/scientific name, file path, sampling rate, duration). Map to local audio files.
 - CUB-200-2011: read `images.txt`, `classes.txt`, `image_class_labels.txt`. Map class id -> species name; build absolute image paths.
-- SSW60: decompress tarball to `data/ssw60/`; index images/audio; read provided metadata if available.
 
 ### Species normalization
 
 - Normalize names: lowercase; remove authorship strings; strip punctuation; collapse whitespace; unify hyphen/space.
 - Build mapping dict: {normalized_name -> canonical/scientific name} per dataset.
 - Compute intersection between Xeno-Canto and CUB-200 species; keep only species present in both for intersection experiments.
-- SSW60 runs are separate but use same normalization for reporting consistency.
 
 ### Splits
 
@@ -135,10 +132,9 @@ This plan follows the chosen stack: Python, UV for package management, PyTorch e
 - Optional: ROC-AUC one-vs-rest for image models if probabilities available.
 - Save per-class metrics CSV and confusion matrix PNG.
 
-## Cross-Dataset Experiments
+## Cross-Modal Experiments
 
 - Intersection (Xeno-Canto ∩ CUB-200): run audio-only and image-only classifiers.
-- SSW60: run same pipelines with images+audio; report separately.
 - Ensure comparable preprocessing and hyperparameters.
 
 ## Ablations
@@ -146,12 +142,11 @@ This plan follows the chosen stack: Python, UV for package management, PyTorch e
 - Audio vs Image vs Late Fusion (logits weighted sum or simple MLP on concatenated heads).
 - Input resolution effects; augmentation on/off.
 
-## Results Aggregation and Paper Generation
+## Results Aggregation and Analysis
 
 - Aggregate metrics across models/datasets into a single DataFrame and export tables.
 - Generate figures (training curves, confusion matrices) programmatically.
-- LaTeX (ICML 2025 short): Fill sections with concise text and include tables/figures; compile with `pdflatex`.
-- Script/notebook writes to `paper/output/icml2025_short.pdf`.
+- Analyze model performance and generate comprehensive summaries.
 
 ## Risks and Mitigations
 
@@ -161,8 +156,8 @@ This plan follows the chosen stack: Python, UV for package management, PyTorch e
 
 ## Milestones
 
-- M1: Species intersection and SSW60 indexing.
+- M1: Species intersection and dataset indexing.
 - M2: MFCC cache and image manifests.
 - M3: Baseline CNN/ResNet runs.
 - M4: ViT runs for audio and images.
-- M5: Aggregation and LaTeX draft.
+- M5: Results aggregation and analysis.

@@ -11,8 +11,8 @@
 Complete implementation of a bird species classification system supporting:
 - Multi-modal input (images and audio MFCC features)
 - Multiple architectures (CNN and Vision Transformers)
-- Multiple datasets (Xeno-Canto, CUB-200-2011, SSW60)
-- End-to-end pipeline from data indexing to paper generation
+- Multiple datasets (Xeno-Canto, CUB-200-2011)
+- End-to-end pipeline from data indexing to results analysis
 
 ## Implementation Statistics
 
@@ -52,7 +52,6 @@ speckitdlbird/
 ### ✅ Data Infrastructure
 - [x] Xeno-Canto audio indexing
 - [x] CUB-200-2011 image indexing
-- [x] SSW60 extraction and indexing
 - [x] Species name normalization
 - [x] Dataset intersection computation
 - [x] Stratified split generation
@@ -154,8 +153,7 @@ ImageResNet-18: 11,181,642 parameters
 📊 Trained model checkpoints
 📈 Training curves and metrics
 📉 Confusion matrices
-📄 Results tables (LaTeX)
-📑 4-page ICML paper (PDF)
+📄 Results summaries and analysis
 
 ## Next Steps (User)
 

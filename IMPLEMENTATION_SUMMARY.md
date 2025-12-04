@@ -24,7 +24,6 @@
 #### Data Indexing
 - `src/data/xeno_canto.py`: Xeno-Canto audio dataset indexing with flexible metadata parsing
 - `src/data/cub.py`: CUB-200-2011 image dataset indexing
-- `src/data/ssw60.py`: SSW60 tarball extraction and indexing
 
 #### Species Management
 - `src/utils/species.py`: Species name normalization and intersection computation
@@ -116,7 +115,7 @@ Created 6 comprehensive notebooks:
 3. **02_audio_features.ipynb**: MFCC extraction and caching
 4. **03_image_models.ipynb**: Image dataset preparation and manifests
 5. **04_training_compare.ipynb**: Model training and comparison framework
-6. **05_results_paper.ipynb**: Results aggregation and LaTeX paper generation
+6. **05_results_paper.ipynb**: Results aggregation and analysis
 
 ### 10. Documentation ✅
 
@@ -138,7 +137,7 @@ Created 6 comprehensive notebooks:
 ### Key Features
 
 - **Multi-modal**: Supports both audio (MFCC) and image inputs
-- **Multi-dataset**: Handles Xeno-Canto, CUB-200, and SSW60
+- **Multi-dataset**: Handles Xeno-Canto and CUB-200-2011
 - **Species matching**: Intelligent name normalization for cross-dataset compatibility
 - **Modern architectures**: CNNs and Vision Transformers
 - **Production-ready**: Checkpointing, logging, metrics tracking
@@ -169,9 +168,9 @@ All core functionality tested and verified:
    - Metrics saved to `artifacts/metrics/`
    - Logs printed during training
 
-4. **Generate paper**:
+4. **Analyze results**:
    - Run 05_results_paper.ipynb
-   - Compile LaTeX in `paper/` directory
+   - Review metrics in `artifacts/results/`
 
 ### Optional enhancements:
 
@@ -214,8 +213,7 @@ All dependencies installed and locked:
 ✓ Multi-modal support (audio, image)
 ✓ Evaluation metrics (accuracy, F1, confusion matrix)
 ✓ Checkpointing and early stopping
-✓ Results aggregation
-✓ ICML paper template integration
+✓ Results aggregation and analysis
 
 ---
 

@@ -78,7 +78,6 @@ Update the dataset paths in notebooks according to your local setup:
 - **Xeno-Canto A-M v11**: `/media/giovanni/TOSHIBA EXT/dlbird/datasets/datasets/rohanrao/xeno-canto-bird-recordings-extended-a-m/versions/11`
 - **Xeno-Canto N-Z v11**: `/media/giovanni/TOSHIBA EXT/dlbird/datasets/datasets/rohanrao/xeno-canto-bird-recordings-extended-n-z/versions/11`
 - **CUB-200-2011 v7**: `/media/giovanni/TOSHIBA EXT/dlbird/datasets/datasets/wenewone/cub2002011/versions/7`
-- **SSW60 tarball**: `/media/giovanni/TOSHIBA EXT/dlbird/datasets/mixed/ssw60.tar.gz`
 
 ## Workflow
 
@@ -91,7 +90,6 @@ Run `00_env_setup.ipynb` to verify installation and save environment info.
 Run `01_intersection.ipynb` to:
 - Index Xeno-Canto audio metadata
 - Index CUB-200-2011 image metadata
-- Extract and index SSW60 dataset
 - Normalize species names
 - Compute species intersection
 - Filter datasets to intersection species
@@ -115,17 +113,16 @@ Run `03_image_models.ipynb` to:
 Run `04_training_compare.ipynb` to:
 - Train Audio CNN on MFCC features
 - Train Audio ViT on MFCC features
-- Train Image ResNet on CUB/SSW60
-- Train Image ViT on CUB/SSW60
+- Train Image ResNet on CUB-200-2011
+- Train Image ViT on CUB-200-2011
 - Evaluate all models and save metrics
 
-### 6. Results and Paper Generation
+### 6. Results Analysis
 
 Run `05_results_paper.ipynb` to:
 - Aggregate metrics from all experiments
 - Generate comparison tables and figures
-- Fill LaTeX template with results
-- Compile ICML 2025 short paper
+- Analyze model performance across datasets
 
 ## Models
 
@@ -171,27 +168,11 @@ Run `05_results_paper.ipynb` to:
 - **Per-class Precision/Recall/F1**: Detailed per-species metrics
 - **Confusion Matrix**: Full confusion matrix visualization
 
-## Paper
-
-The project generates a 4-page ICML 2025 short paper with:
-- Methodology description
-- Results tables and figures
-- Ablation studies (audio vs image vs fusion)
-- Ethics statement and reproducibility checklist
-
-Compile the paper:
-
-```bash
-cd paper
-pdflatex icml2025_bird_classification.tex
-```
-
 ## License
 
 This project follows the licenses of the constituent datasets:
 - Xeno-Canto: CC-BY-NC-SA 4.0
 - CUB-200-2011: Research use
-- SSW60: Check source repository
 
 ## Citation
 

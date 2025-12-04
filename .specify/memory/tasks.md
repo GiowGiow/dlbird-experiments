@@ -1,6 +1,6 @@
 # Project Tasks: Bird Species Classification (Images + Audio)
 
-This document lists actionable tasks for running CNN and ViT experiments across audio (MFCC static/delta/delta-delta) and images, using the intersection of Xeno-Canto and CUB-200-2011, plus SSW60.
+This document lists actionable tasks for running CNN and ViT experiments across audio (MFCC static/delta/delta-delta) and images, using the intersection of Xeno-Canto and CUB-200-2011.
 
 **Status: ✅ Core Implementation Complete**
 
@@ -34,13 +34,7 @@ This document lists actionable tasks for running CNN and ViT experiments across 
 - Map class ids to species names and image paths.
 - Persist to `artifacts/cub_index.parquet`.
 
-## 5. Decompress and index SSW60
-
-- Extract `ssw60.tar.gz` into `data/ssw60/`.
-- Index images and audio with species names.
-- Persist to `artifacts/ssw60_index.parquet`.
-
-## 6. Normalize species names
+## 5. Normalize species names
 
 - Implement normalization: lowercase, strip authorship/punctuation, collapse whitespace, unify hyphen/space.
 - Create mapping dicts per dataset.
@@ -104,10 +98,9 @@ This document lists actionable tasks for running CNN and ViT experiments across 
 - Compute accuracy, macro-F1, per-class precision/recall, confusion matrices.
 - Save CSVs and PNG plots per model/dataset.
 
-## 17. Cross-dataset runs
+## 17. Cross-modal evaluation
 
 - Run audio-only and image-only classifiers on intersection (Xeno-Canto ∩ CUB).
-- Run same pipelines on SSW60.
 - Keep preprocessing and hyperparameters consistent.
 
 ## 18. Ablation and late fusion
@@ -121,9 +114,3 @@ This document lists actionable tasks for running CNN and ViT experiments across 
 - Combine metrics across models/datasets into summary tables.
 - Generate plots.
 - Save `artifacts/results_summary.parquet` and figures.
-
-## 20. Generate ICML paper
-
-- Produce 4-page LaTeX article using ICML 2025 template.
-- Auto-fill sections from notebook outputs.
-- Compile to `paper/output/icml2025_short.pdf`.

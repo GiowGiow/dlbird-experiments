@@ -9,7 +9,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.data.xeno_canto import index_xeno_canto
 from src.data.cub import index_cub
-from src.data.ssw60 import extract_and_index_ssw60
 from src.utils.species import normalize_species_name
 
 ARTIFACTS = Path(__file__).parent.parent / "artifacts"
@@ -25,7 +24,6 @@ XENO_CANTO_NZ = Path(
 CUB_ROOT = Path(
     "/media/giovanni/TOSHIBA EXT/dlbird/datasets/datasets/wenewone/cub2002011/versions/7"
 )
-SSW60_TARBALL = Path("/media/giovanni/TOSHIBA EXT/dlbird/datasets/ssw60_dataset.tar")
 
 print("=" * 80)
 print("TASK 3: INDEX XENO-CANTO")
@@ -62,25 +60,7 @@ cub_df.to_parquet(ARTIFACTS / "cub_index.parquet", index=False)
 print(f"\n✓ Saved to {ARTIFACTS / 'cub_index.parquet'}")
 
 print("\n" + "=" * 80)
-print("TASK 5: EXTRACT AND INDEX SSW60")
-print("=" * 80)
-
-if SSW60_TARBALL.exists():
-    print("\nExtracting SSW60 tarball...")
-    ssw60_df = extract_and_index_ssw60(SSW60_TARBALL, ARTIFACTS / "ssw60")
-    print(f"Found {len(ssw60_df)} files")
-    print(f"Unique species: {ssw60_df['species'].nunique()}")
-    print(f"Audio files: {(ssw60_df['modality'] == 'audio').sum()}")
-    print(f"Image files: {(ssw60_df['modality'] == 'image').sum()}")
-
-    # Save
-    ssw60_df.to_parquet(ARTIFACTS / "ssw60_index.parquet", index=False)
-    print(f"\n✓ Saved to {ARTIFACTS / 'ssw60_index.parquet'}")
-else:
-    print(f"\n✗ SSW60 tarball not found at {SSW60_TARBALL}")
-
-print("\n" + "=" * 80)
-print("TASK 6: NORMALIZE SPECIES NAMES")
+print("TASK 5: NORMALIZE SPECIES NAMES")
 print("=" * 80)
 
 # Normalize Xeno-Canto species
@@ -95,15 +75,8 @@ cub_df["species_normalized"] = cub_df["species"].apply(normalize_species_name)
 print(f"Unique normalized species: {cub_df['species_normalized'].nunique()}")
 cub_df.to_parquet(ARTIFACTS / "cub_index.parquet", index=False)
 
-# Normalize SSW60 species if available
-if SSW60_TARBALL.exists() and "ssw60_df" in locals():
-    print("\nNormalizing SSW60 species...")
-    ssw60_df["species_normalized"] = ssw60_df["species"].apply(normalize_species_name)
-    print(f"Unique normalized species: {ssw60_df['species_normalized'].nunique()}")
-    ssw60_df.to_parquet(ARTIFACTS / "ssw60_index.parquet", index=False)
-
 print("\n" + "=" * 80)
-print("TASK 7: COMPUTE SPECIES INTERSECTION")
+print("TASK 6: COMPUTE SPECIES INTERSECTION")
 print("=" * 80)
 
 # Find intersection
@@ -114,12 +87,6 @@ intersection = xc_species & cub_species
 print(f"\nXeno-Canto species: {len(xc_species)}")
 print(f"CUB species: {len(cub_species)}")
 print(f"Intersection: {len(intersection)}")
-
-if SSW60_TARBALL.exists() and "ssw60_df" in locals():
-    ssw60_species = set(ssw60_df["species_normalized"].unique())
-    intersection_all = xc_species & cub_species & ssw60_species
-    print(f"SSW60 species: {len(ssw60_species)}")
-    print(f"Three-way intersection: {len(intersection_all)}")
 
 # Filter datasets to intersection
 print("\nFiltering to intersection...")
@@ -150,13 +117,13 @@ intersection_metadata = {
 with open(ARTIFACTS / "intersection_metadata.json", "w") as f:
     json.dump(intersection_metadata, f, indent=2)
 
-print(f"\n✓ Saved filtered datasets and intersection metadata")
-print(f"\nSample intersecting species:")
+print("\n✓ Saved filtered datasets and intersection metadata")
+print("\nSample intersecting species:")
 for sp in sorted(list(intersection))[:10]:
     xc_count = (xc_filtered["species_normalized"] == sp).sum()
     cub_count = (cub_filtered["species_normalized"] == sp).sum()
     print(f"  {sp}: {xc_count} audio, {cub_count} images")
 
 print("\n" + "=" * 80)
-print("✓ TASKS 3-7 COMPLETE")
+print("✓ TASKS 3-6 COMPLETE")
 print("=" * 80)

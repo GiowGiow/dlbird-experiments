@@ -51,9 +51,6 @@ def main():
         "CUB-200-2011 v7": Path(
             "/media/giovanni/TOSHIBA EXT/dlbird/datasets/datasets/wenewone/cub2002011/versions/7"
         ),
-        "SSW60 tarball": Path(
-            "/media/giovanni/TOSHIBA EXT/dlbird/datasets/mixed/ssw60.tar.gz"
-        ),
     }
 
     results = {}

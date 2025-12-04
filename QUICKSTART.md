@@ -45,7 +45,7 @@ Run notebooks in order:
 3. `02_audio_features.ipynb` - Extract and cache MFCC features
 4. `03_image_models.ipynb` - Prepare image datasets
 5. `04_training_compare.ipynb` - Train all models
-6. `05_results_paper.ipynb` - Generate results and paper
+6. `05_results_paper.ipynb` - Analyze results
 
 ### 4. Monitor Progress
 
@@ -58,10 +58,9 @@ Artifacts are saved to:
 ### 5. Access Results
 
 After running all notebooks:
-- Training curves: `paper/figures/training_curves.pdf`
-- Confusion matrices: `paper/figures/confusion_*.pdf`
-- Results table: `paper/tables/results_summary.tex`
-- Final paper: `paper/output/icml2025_bird_classification.pdf`
+- Model checkpoints: `artifacts/checkpoints/`
+- Evaluation metrics: `artifacts/metrics/`
+- Results summaries: `artifacts/results/`
 
 ## Troubleshooting
 
@@ -100,7 +99,7 @@ jupyter notebook notebooks/
 # Train a specific model (from notebook)
 # See 04_training_compare.ipynb for examples
 
-# Generate paper
+# Analyze results
 # Run 05_results_paper.ipynb
 ```
 
@@ -127,7 +126,7 @@ For detailed information:
 ✓ Features cached successfully
 ✓ Models train without errors
 ✓ Metrics saved properly
-✓ Paper compiles successfully
+✓ Results analysis complete
 
 ---
 

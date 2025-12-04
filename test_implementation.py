@@ -16,7 +16,6 @@ def test_imports():
         from src.utils.species import normalize_species_name
         from src.data.xeno_canto import index_xeno_canto
         from src.data.cub import index_cub
-        from src.data.ssw60 import extract_and_index_ssw60
         from src.features.audio import extract_mfcc_features
         from src.datasets.audio import AudioMFCCDataset, create_species_mapping
         from src.datasets.image import ImageDataset, get_image_transforms
