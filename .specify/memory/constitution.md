@@ -65,7 +65,9 @@ Experiment metadata:
 
 ## Project Structure
 
-The project is organized as follows:
+The project follows SpecKit organizational patterns with clear separation between specifications, implementation, and experimental results.
+
+### Core Implementation Structure
 
 - `src/`: Core implementation modules
   - `data/`: Dataset loaders for CUB-200 and Xeno-Canto
@@ -80,6 +82,65 @@ The project is organized as follows:
 - `scripts/`: Standalone Python scripts for running experiments
 - `artifacts/`: Saved models, results, splits, and cached features
 - `data/`: Raw dataset directories (not tracked in git)
+
+### SpecKit Documentation Structure
+
+Following SpecKit methodology, all specifications, plans, and feature documentation are organized under `.specify/`:
+
+```
+.specify/
+├── memory/
+│   ├── constitution.md          # This file - project governing principles
+│   ├── technical_plan.md         # High-level technical roadmap
+│   └── tasks.md                  # Global task tracking
+├── scripts/
+│   └── [utility scripts for spec management]
+├── templates/
+│   ├── spec-template.md          # Template for feature specifications
+│   ├── plan-template.md          # Template for implementation plans
+│   ├── tasks-template.md         # Template for task breakdowns
+│   └── checklist-template.md     # Template for validation checklists
+└── specs/
+    ├── 001-validation-phase/
+    │   ├── spec.md               # Feature specification (what to build)
+    │   ├── plan.md               # Implementation plan (how to build)
+    │   ├── quickstart.md         # Quick start guide
+    │   ├── research.md           # Technical research and decisions
+    │   └── artifacts/            # Validation outputs, plots, analysis
+    ├── 002-phase1-critical-fixes/
+    │   ├── spec.md               # Class imbalance & normalization fixes
+    │   ├── plan.md               # Detailed implementation steps
+    │   ├── tasks.md              # Actionable task breakdown
+    │   ├── quickstart.md         # Immediate action guide
+    │   └── artifacts/            # Experiment results, checkpoints
+    └── 003-future-feature/
+        └── ...
+```
+
+### Specification Numbering Convention
+
+Features and experimental phases are numbered sequentially with descriptive names:
+- `001-validation-phase`: Initial model validation and root cause analysis
+- `002-phase1-critical-fixes`: Class weighting and feature normalization
+- `003-phase2-feature-engineering`: Mel-spectrograms and augmentation
+- `004-phase3-architecture-optimization`: Pretrained models and architecture search
+- `005-phase4-advanced-techniques`: Multi-modal fusion and ensembles
+
+Each specification directory contains:
+- **spec.md**: Functional requirements and user stories (tech-stack agnostic)
+- **plan.md**: Technical implementation plan with architecture decisions
+- **tasks.md**: Ordered task breakdown with dependencies and parallel execution markers
+- **quickstart.md**: Immediate action steps for starting implementation
+- **research.md**: Technical research, library versions, and design rationale
+- **artifacts/**: Experimental outputs, plots, checkpoints, analysis files
+
+### Document Organization Rules
+
+1. **Specifications First**: Write `spec.md` before `plan.md` - define what to build before how to build it
+2. **Clarify Before Planning**: Use clarification workflow to refine specs before creating technical plans
+3. **Tasks from Plans**: Generate `tasks.md` from validated `plan.md` with clear dependencies
+4. **Artifacts Co-located**: Keep experimental results with their corresponding spec for traceability
+5. **Version Control**: All spec documents are versioned; amendments documented in spec history section
 
 ## Governance
 

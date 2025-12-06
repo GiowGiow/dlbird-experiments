@@ -10,6 +10,68 @@ from tqdm import tqdm
 import json
 
 
+class WarmupScheduler:
+    """Learning rate warmup wrapper for any scheduler.
+    
+    Linearly increases learning rate from lr/10 to lr over warmup_epochs,
+    then delegates to the base scheduler.
+    
+    Args:
+        optimizer: PyTorch optimizer
+        base_scheduler: Base scheduler to use after warmup (can be None)
+        warmup_epochs: Number of epochs for warmup
+        base_lr: Base learning rate (taken from optimizer if None)
+    """
+    
+    def __init__(self, optimizer, base_scheduler=None, warmup_epochs=5, base_lr=None):
+        self.optimizer = optimizer
+        self.base_scheduler = base_scheduler
+        self.warmup_epochs = warmup_epochs
+        self.base_lr = base_lr or optimizer.param_groups[0]['lr']
+        self.current_epoch = 0
+    
+    def step(self, epoch=None):
+        """Update learning rate."""
+        if epoch is not None:
+            self.current_epoch = epoch
+        
+        if self.current_epoch < self.warmup_epochs:
+            # Linear warmup: lr_min + (lr_max - lr_min) * current / warmup
+            lr_min = self.base_lr / 10.0
+            lr = lr_min + (self.base_lr - lr_min) * (self.current_epoch + 1) / self.warmup_epochs
+            for param_group in self.optimizer.param_groups:
+                param_group['lr'] = lr
+        elif self.base_scheduler is not None:
+            # After warmup, use base scheduler
+            self.base_scheduler.step()
+        
+        self.current_epoch += 1
+    
+    def get_last_lr(self):
+        """Get current learning rate."""
+        return [param_group['lr'] for param_group in self.optimizer.param_groups]
+    
+    def state_dict(self):
+        """Get scheduler state for checkpointing."""
+        state = {
+            'current_epoch': self.current_epoch,
+            'warmup_epochs': self.warmup_epochs,
+            'base_lr': self.base_lr,
+        }
+        if self.base_scheduler is not None and hasattr(self.base_scheduler, 'state_dict'):
+            state['base_scheduler'] = self.base_scheduler.state_dict()
+        return state
+    
+    def load_state_dict(self, state_dict):
+        """Load scheduler state from checkpoint."""
+        self.current_epoch = state_dict.get('current_epoch', 0)
+        self.warmup_epochs = state_dict.get('warmup_epochs', self.warmup_epochs)
+        self.base_lr = state_dict.get('base_lr', self.base_lr)
+        if 'base_scheduler' in state_dict and self.base_scheduler is not None:
+            if hasattr(self.base_scheduler, 'load_state_dict'):
+                self.base_scheduler.load_state_dict(state_dict['base_scheduler'])
+
+
 class Trainer:
     """Unified trainer for all models with AMP and checkpointing."""
 
@@ -26,6 +88,10 @@ class Trainer:
         use_amp: bool = True,
         gradient_clip: float = 1.0,
         early_stopping_patience: int = 5,
+        class_weights: Optional[torch.Tensor] = None,
+        loss_fn: Optional[nn.Module] = None,
+        mixup_alpha: float = 0.0,
+        mixup_prob: float = 0.0,
     ):
         """
         Args:
@@ -40,6 +106,11 @@ class Trainer:
             use_amp: Use automatic mixed precision
             gradient_clip: Max gradient norm (0 to disable)
             early_stopping_patience: Epochs without improvement before stopping
+            class_weights: Optional class weights for CrossEntropyLoss (tensor of shape [num_classes])
+                          Only used if loss_fn is None
+            loss_fn: Custom loss function (e.g., FocalLoss). If None, uses CrossEntropyLoss
+            mixup_alpha: Alpha parameter for MixUp Beta distribution (0 to disable)
+            mixup_prob: Probability of applying MixUp to a batch
         """
         self.model = model.to(device)
         self.train_loader = train_loader
@@ -50,8 +121,17 @@ class Trainer:
         self.use_amp = use_amp and device == "cuda"
         self.gradient_clip = gradient_clip
         self.early_stopping_patience = early_stopping_patience
+        self.mixup_alpha = mixup_alpha
+        self.mixup_prob = mixup_prob
 
-        self.criterion = nn.CrossEntropyLoss()
+        # Create criterion: use provided loss_fn or default to CrossEntropyLoss
+        if loss_fn is not None:
+            self.criterion = loss_fn
+        elif class_weights is not None:
+            self.class_weights = class_weights.to(device)
+            self.criterion = nn.CrossEntropyLoss(weight=self.class_weights)
+        else:
+            self.criterion = nn.CrossEntropyLoss()
         self.scaler = GradScaler() if self.use_amp else None
 
         # Checkpointing
