@@ -12,64 +12,71 @@ import json
 
 class WarmupScheduler:
     """Learning rate warmup wrapper for any scheduler.
-    
+
     Linearly increases learning rate from lr/10 to lr over warmup_epochs,
     then delegates to the base scheduler.
-    
+
     Args:
         optimizer: PyTorch optimizer
         base_scheduler: Base scheduler to use after warmup (can be None)
         warmup_epochs: Number of epochs for warmup
         base_lr: Base learning rate (taken from optimizer if None)
     """
-    
+
     def __init__(self, optimizer, base_scheduler=None, warmup_epochs=5, base_lr=None):
         self.optimizer = optimizer
         self.base_scheduler = base_scheduler
         self.warmup_epochs = warmup_epochs
-        self.base_lr = base_lr or optimizer.param_groups[0]['lr']
+        self.base_lr = base_lr or optimizer.param_groups[0]["lr"]
         self.current_epoch = 0
-    
+
     def step(self, epoch=None):
         """Update learning rate."""
         if epoch is not None:
             self.current_epoch = epoch
-        
+
         if self.current_epoch < self.warmup_epochs:
             # Linear warmup: lr_min + (lr_max - lr_min) * current / warmup
             lr_min = self.base_lr / 10.0
-            lr = lr_min + (self.base_lr - lr_min) * (self.current_epoch + 1) / self.warmup_epochs
+            lr = (
+                lr_min
+                + (self.base_lr - lr_min)
+                * (self.current_epoch + 1)
+                / self.warmup_epochs
+            )
             for param_group in self.optimizer.param_groups:
-                param_group['lr'] = lr
+                param_group["lr"] = lr
         elif self.base_scheduler is not None:
             # After warmup, use base scheduler
             self.base_scheduler.step()
-        
+
         self.current_epoch += 1
-    
+
     def get_last_lr(self):
         """Get current learning rate."""
-        return [param_group['lr'] for param_group in self.optimizer.param_groups]
-    
+        return [param_group["lr"] for param_group in self.optimizer.param_groups]
+
     def state_dict(self):
         """Get scheduler state for checkpointing."""
         state = {
-            'current_epoch': self.current_epoch,
-            'warmup_epochs': self.warmup_epochs,
-            'base_lr': self.base_lr,
+            "current_epoch": self.current_epoch,
+            "warmup_epochs": self.warmup_epochs,
+            "base_lr": self.base_lr,
         }
-        if self.base_scheduler is not None and hasattr(self.base_scheduler, 'state_dict'):
-            state['base_scheduler'] = self.base_scheduler.state_dict()
+        if self.base_scheduler is not None and hasattr(
+            self.base_scheduler, "state_dict"
+        ):
+            state["base_scheduler"] = self.base_scheduler.state_dict()
         return state
-    
+
     def load_state_dict(self, state_dict):
         """Load scheduler state from checkpoint."""
-        self.current_epoch = state_dict.get('current_epoch', 0)
-        self.warmup_epochs = state_dict.get('warmup_epochs', self.warmup_epochs)
-        self.base_lr = state_dict.get('base_lr', self.base_lr)
-        if 'base_scheduler' in state_dict and self.base_scheduler is not None:
-            if hasattr(self.base_scheduler, 'load_state_dict'):
-                self.base_scheduler.load_state_dict(state_dict['base_scheduler'])
+        self.current_epoch = state_dict.get("current_epoch", 0)
+        self.warmup_epochs = state_dict.get("warmup_epochs", self.warmup_epochs)
+        self.base_lr = state_dict.get("base_lr", self.base_lr)
+        if "base_scheduler" in state_dict and self.base_scheduler is not None:
+            if hasattr(self.base_scheduler, "load_state_dict"):
+                self.base_scheduler.load_state_dict(state_dict["base_scheduler"])
 
 
 class Trainer:

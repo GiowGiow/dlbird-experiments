@@ -44,30 +44,26 @@ class AudioCNNv2(nn.Module):
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(2, 2),
-            
             # Block 2: 64 -> 128 channels
             nn.Conv2d(64, 128, kernel_size=3, padding=1),
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(2, 2),
-            
             # Block 3: 128 -> 256 channels
             nn.Conv2d(128, 256, kernel_size=3, padding=1),
             nn.BatchNorm2d(256),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(2, 2),
-            
             # Block 4: 256 -> 512 channels
             nn.Conv2d(256, 512, kernel_size=3, padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(2, 2),
-            
             # Block 5: 512 -> 512 channels (deeper network)
             nn.Conv2d(512, 512, kernel_size=3, padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True),
-            nn.AdaptiveAvgPool2d((1, 1))
+            nn.AdaptiveAvgPool2d((1, 1)),
         )
 
         self.classifier = nn.Sequential(
@@ -76,7 +72,7 @@ class AudioCNNv2(nn.Module):
             nn.Linear(512, 512),
             nn.ReLU(inplace=True),
             nn.Dropout(dropout),
-            nn.Linear(512, num_classes)
+            nn.Linear(512, num_classes),
         )
 
         self._initialize_weights()
@@ -112,15 +108,15 @@ class AudioCNNv2(nn.Module):
 if __name__ == "__main__":
     # Test architecture
     model = AudioCNNv2(num_classes=89)
-    
+
     # Count parameters
     total_params = sum(p.numel() for p in model.parameters())
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    
+
     print(f"AudioCNNv2 Architecture:")
     print(f"  Total parameters: {total_params:,}")
     print(f"  Trainable parameters: {trainable_params:,}")
-    
+
     # Test forward pass
     x = torch.randn(4, 3, 20, 500)  # batch=4, channels=3, H=20, W=500
     y = model(x)
@@ -128,17 +124,20 @@ if __name__ == "__main__":
     print(f"  Input shape: {x.shape}")
     print(f"  Output shape: {y.shape}")
     print(f"  Expected output shape: (4, 89)")
-    
+
     # Verify output shape
     assert y.shape == (4, 89), f"Output shape mismatch: {y.shape} vs (4, 89)"
     print("\n✓ Architecture test passed!")
-    
+
     # Compare with AudioCNN
     from audio_cnn import AudioCNN
+
     old_model = AudioCNN(num_classes=89)
     old_params = sum(p.numel() for p in old_model.parameters())
-    
+
     print(f"\nComparison:")
     print(f"  AudioCNN:   {old_params:,} parameters")
     print(f"  AudioCNNv2: {total_params:,} parameters")
-    print(f"  Increase:   {total_params/old_params:.2f}x ({total_params - old_params:,} more)")
+    print(
+        f"  Increase:   {total_params / old_params:.2f}x ({total_params - old_params:,} more)"
+    )

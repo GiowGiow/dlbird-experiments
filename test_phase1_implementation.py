@@ -2,6 +2,7 @@
 
 import sys
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).parent))
 
 import json
@@ -12,7 +13,10 @@ import pandas as pd
 # Import modified components
 # Import load_class_weights from the training script
 import importlib.util
-spec = importlib.util.spec_from_file_location("train_audio", "scripts/03_train_audio.py")
+
+spec = importlib.util.spec_from_file_location(
+    "train_audio", "scripts/03_train_audio.py"
+)
 train_audio = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(train_audio)
 load_class_weights = train_audio.load_class_weights
@@ -35,7 +39,7 @@ xc_df = xc_df[xc_df["species_normalized"].isin(species_to_keep)].copy()
 species_list = sorted(xc_df["species_normalized"].unique())
 
 # Test load function
-weights = load_class_weights(species_list, method='balanced')
+weights = load_class_weights(species_list, method="balanced")
 
 print(f"✅ Function executed successfully")
 print(f"✅ Weights shape: {weights.shape} (expected: (90,))")
@@ -65,7 +69,7 @@ dataset = AudioMFCCDataset(
     indices=splits["train"][:1000],  # Sample 1000 for speed
     species_to_idx=species_to_idx,
     transform=None,
-    normalize=True
+    normalize=True,
 )
 
 # Load a batch
@@ -100,20 +104,26 @@ dataset_no_norm = AudioMFCCDataset(
     indices=splits["train"][:100],
     species_to_idx=species_to_idx,
     transform=None,
-    normalize=False
+    normalize=False,
 )
 
 loader_no_norm = DataLoader(dataset_no_norm, batch_size=32, shuffle=False)
 batch_no_norm, _ = next(iter(loader_no_norm))
 
 print(f"\nWithout normalization (for comparison):")
-print(f"  MFCC  - mean: {batch_no_norm[:, 0].mean().item():+.4f}, std: {batch_no_norm[:, 0].std().item():.4f}")
-print(f"  Delta - mean: {batch_no_norm[:, 1].mean().item():+.4f}, std: {batch_no_norm[:, 1].std().item():.4f}")
+print(
+    f"  MFCC  - mean: {batch_no_norm[:, 0].mean().item():+.4f}, std: {batch_no_norm[:, 0].std().item():.4f}"
+)
+print(
+    f"  Delta - mean: {batch_no_norm[:, 1].mean().item():+.4f}, std: {batch_no_norm[:, 1].std().item():.4f}"
+)
 
 print("\n" + "=" * 80)
 print("✅ ALL VALIDATION TESTS PASSED")
 print("=" * 80)
 print("\nPhase 1 implementation is ready for training!")
 print("\nNext steps:")
-print("  1. Run 1-epoch smoke test: python scripts/03_train_audio.py --model AudioCNN --use-class-weights --epochs 1 --batch-size 32")
+print(
+    "  1. Run 1-epoch smoke test: python scripts/03_train_audio.py --model AudioCNN --use-class-weights --epochs 1 --batch-size 32"
+)
 print("  2. If successful, run full training for 50 epochs")

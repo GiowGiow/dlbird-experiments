@@ -11,9 +11,9 @@ from .spec_augment import (
 )
 
 __all__ = [
-    'FrequencyMasking',
-    'TimeMasking',
-    'SpecAugment',
-    'mixup_batch',
-    'BackgroundNoiseInjection',
+    "FrequencyMasking",
+    "TimeMasking",
+    "SpecAugment",
+    "mixup_batch",
+    "BackgroundNoiseInjection",
 ]

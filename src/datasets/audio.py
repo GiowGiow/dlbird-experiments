@@ -43,7 +43,7 @@ class AudioMFCCDataset(Dataset):
         self.species_to_idx = species_to_idx
         self.transform = transform
         self.normalize = normalize
-        
+
         # Normalization statistics from validation phase
         if self.normalize:
             self.mfcc_mean = -8.80
@@ -82,7 +82,7 @@ class AudioMFCCDataset(Dataset):
 
         # Convert to tensor
         features = torch.from_numpy(features).float()
-        
+
         # Apply normalization if enabled
         if self.normalize:
             # Channel 0: MFCC - standardize to mean=0, std=1
