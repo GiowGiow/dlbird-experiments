@@ -35,8 +35,9 @@ speckitdlbird/
 │   └── utils/        # 3 modules (species, splits)
 ├── notebooks/        # 6 experiment notebooks
 ├── artifacts/        # Generated outputs
-├── tests/           # Verification scripts
-└── docs/            # Documentation
+├── scripts/          # Executable scripts
+├── tests/            # Verification scripts
+└── specs/            # Project specifications
 ```
 
 ## Completed Components

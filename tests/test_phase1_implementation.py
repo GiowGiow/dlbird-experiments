@@ -3,7 +3,7 @@
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import json
 import torch
@@ -14,8 +14,9 @@ import pandas as pd
 # Import load_class_weights from the training script
 import importlib.util
 
+script_path = Path(__file__).parent.parent / "scripts/03_train_audio.py"
 spec = importlib.util.spec_from_file_location(
-    "train_audio", "scripts/03_train_audio.py"
+    "train_audio", str(script_path)
 )
 train_audio = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(train_audio)

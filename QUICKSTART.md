@@ -13,7 +13,7 @@
 
 ```bash
 # Check if environment is set up
-uv run python test_implementation.py
+uv run python tests/test_implementation.py
 ```
 
 Expected output: All tests should pass ✓
@@ -22,7 +22,7 @@ Expected output: All tests should pass ✓
 
 ```bash
 # Check if datasets are accessible
-uv run python verify_datasets.py
+uv run python scripts/verify_datasets.py
 ```
 
 If datasets are not accessible:
