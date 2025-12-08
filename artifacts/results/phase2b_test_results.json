@@ -1,0 +1,10 @@
+{
+  "model": "AudioCNNv2",
+  "experiment": "phase2b_cnnv2_focal",
+  "test_accuracy": 0.42719614921780985,
+  "f1_macro": 0.21665289641300164,
+  "f1_weighted": 0.4149159013758041,
+  "best_val_acc": 42.238267148014444,
+  "best_epoch": 25,
+  "num_params": 4222041
+}

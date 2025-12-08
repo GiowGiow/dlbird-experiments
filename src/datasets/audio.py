@@ -27,6 +27,7 @@ class AudioMFCCDataset(Dataset):
         indices: List[int],
         species_to_idx: Dict[str, int],
         transform=None,
+        normalize: bool = True,
     ):
         """
         Args:
@@ -35,11 +36,20 @@ class AudioMFCCDataset(Dataset):
             indices: List of dataframe indices to use for this split
             species_to_idx: Mapping from species name to class index
             transform: Optional transform to apply to features
+            normalize: Apply standardization to MFCC and Delta channels
         """
         self.df = df.iloc[indices].reset_index(drop=True)
         self.cache_dir = Path(cache_dir)
         self.species_to_idx = species_to_idx
         self.transform = transform
+        self.normalize = normalize
+
+        # Normalization statistics from validation phase
+        if self.normalize:
+            self.mfcc_mean = -8.80
+            self.mfcc_std = 62.53
+            self.delta_mean = 0.02
+            self.delta_std = 1.69
 
     def __len__(self) -> int:
         return len(self.df)
@@ -72,6 +82,14 @@ class AudioMFCCDataset(Dataset):
 
         # Convert to tensor
         features = torch.from_numpy(features).float()
+
+        # Apply normalization if enabled
+        if self.normalize:
+            # Channel 0: MFCC - standardize to mean=0, std=1
+            features[0] = (features[0] - self.mfcc_mean) / (self.mfcc_std + 1e-8)
+            # Channel 1: Delta - standardize to mean=0, std=1
+            features[1] = (features[1] - self.delta_mean) / (self.delta_std + 1e-8)
+            # Channel 2: Delta² already normalized, no change needed
 
         # Apply transform if provided
         if self.transform:

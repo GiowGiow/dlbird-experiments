@@ -1,0 +1,9 @@
+{
+  "checkpoint": "artifacts/models/phase3_ast_full/AST_best.pth",
+  "epoch": 9,
+  "val_acc": 57.46089049338147,
+  "test_acc": 57.28038507821901,
+  "f1_macro": 0.35716560537220193,
+  "f1_weighted": 0.5690969701960137,
+  "mAP": 0.4307973285984253
+}

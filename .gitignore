@@ -74,3 +74,27 @@ data/ssw60/
 *.hdf5
 *.pkl
 *.pickle
+artifacts/audio_lms_cache/
+# LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+*.pdf
+!paper/example_paper.pdf
