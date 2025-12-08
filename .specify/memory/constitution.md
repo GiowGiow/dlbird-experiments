@@ -1,160 +1,101 @@
-# SpeckitDLBird Constitution
+# SpecKit DLBird Constitution
+
+<!-- Sync Impact Report
+Version: 1.0.0 -> 2.0.0
+Modified Principles:
+- Reproducibility-First -> Academic Rigor (Refocused)
+- Clean, Concise Code -> LaTeX Integrity (Refocused)
+- Data Ethics -> Cohesion (Refocused)
+- Results Traceability -> Constraint Management (Refocused)
+- Simplicity -> Reproducibility & Transparency (Refocused)
+Added Sections:
+- Governance
+- Paper Production Workflow
+Removed Sections:
+- Development Workflow (Replaced by Paper Workflow)
+Templates requiring updates:
+- .specify/templates/plan-template.md (✅ updated implicitly by constitution reference)
+- .specify/templates/spec-template.md (✅ generic)
+- .specify/templates/tasks-template.md (✅ generic)
+Follow-up TODOs:
+- None
+-->
+
 ## Core Principles
 
+### I. Academic Rigor
 
-### I. Reproducibility-First
+The primary output is a scientific paper (`example_paper.tex`). All content must adhere to formal scientific standards: passive voice, objective analysis, and precise terminology. Claims must be backed by data or citations.
 
-All experiments must be fully reproducible: deterministic seeds, pinned dependencies managed with UV, versioned datasets/artifacts, and executable notebooks. Each result corresponds to a specific notebook and commit.
+### II. LaTeX Integrity
 
-<!-- Deterministic runs, environment pinning, and data versioning are mandatory. -->
+The paper must always compile with `pdflatex` without errors. Use standard ICML 2025 packages. Bibliography (`example_paper.bib`) must be valid and complete.
 
-### II. Clean, Concise Code with Documentation
+### III. Cohesion
 
-Code and notebooks must be minimal, readable, and documented inline. Each deep learning architecture includes a brief design rationale and clear hyperparameters. Experiments are described in notebook markdown cells.
+The paper must read as a single, unified study. Audio and Image sections must be integrated, not just concatenated. Discussion and Conclusion must synthesize findings from both modalities.
 
-<!-- Clarity over cleverness; comments explain "why" not just "what". -->
+### IV. Constraint Management
 
-### III. Data Ethics and Compliance
+Strict adherence to the ICML page limit (8-10 pages). Content must be concise and high-value. Space usage is a critical resource to be managed.
 
-We only use bird datasets (audio and image) with appropriate licenses; no personally identifiable information. Attributions and licenses are recorded; dataset splits avoid leakage.
+### V. Reproducibility & Transparency
 
-<!-- Ethics and proper attribution are foundational to this research. -->
-
-### IV. Results Traceability
-
-Each experiment result corresponds to a notebook section and saved artifact path. Figures and metrics are generated programmatically and saved with unique, descriptive filenames.
-
-<!-- Notebooks produce results deterministically with timestamps and seeds. -->
-
-### V. Simplicity and Baselines
-
-Start with strong classical and simple baselines before complex models. Experiment with both audio (CNN, ViT) and image (ResNet, ViT) modalities for bird species classification.
-
-<!-- YAGNI: include only what improves clarity and insight. -->
-
-## Development Workflow, Experiments, and Notebooks
-
-We use multiple Jupyter notebooks, each focused and self-contained. UV manages Python packages and lockfiles.
-
-Notebook plan (names and purposes):
-
-- 00_env_setup.ipynb: verify environment setup and dependencies.
-- 01_intersection.ipynb: identify common species between CUB-200 (images) and Xeno-Canto (audio) datasets; create stratified splits.
-- 02_audio_features.ipynb: extract and cache audio features (MFCCs); prepare for audio model training.
-- 03_image_models.ipynb: train and evaluate image classification models (ResNet-18, ViT).
-- 04_training_compare.ipynb: train and compare audio models (CNN, ViT); consolidate results across modalities.
-
-Environment management (UV):
-
-- Dependencies managed via `pyproject.toml` and locked with UV.
-- Key packages: torch, torchvision, torchaudio, timm, librosa, scikit-learn, numpy, pandas, matplotlib, seaborn, jupyter, ipykernel, rich.
-- Lock all deps; record Python version; create kernel with the env name.
-- Environment setup documented in `00_env_setup.ipynb`.
-
-Architecture documentation:
-
-- For each DL model, include a markdown cell with: input size, backbone, number of params (estimate), optimizer, lr schedule, regularization, augmentation, epochs.
-- Provide a short "why this design" rationale emphasizing simplicity and efficiency.
-- Models implemented: Audio CNN, Audio ViT, Image ResNet-18, Image ViT.
-
-Experiment metadata:
-
-- Set seeds (e.g., 42) for numpy, torch, and dataloaders; enable cudnn deterministic where applicable.
-- Save artifacts under `artifacts/` with run identifiers; log config JSON next to checkpoints.
-- Results saved as JSON files in `artifacts/results/` for easy comparison and analysis.
-
-## Project Structure
-
-The project follows SpecKit organizational patterns with clear separation between specifications, implementation, and experimental results.
-
-### Core Implementation Structure
-
-- `src/`: Core implementation modules
-  - `data/`: Dataset loaders for CUB-200 and Xeno-Canto
-  - `datasets/`: PyTorch dataset classes for audio and image data
-  - `features/`: Audio feature extraction (MFCC caching)
-  - `models/`: Model implementations (Audio CNN/ViT, Image ResNet/ViT)
-  - `training/`: Training loops and utilities
-  - `evaluation/`: Metrics and result aggregation
-  - `utils/`: Species mapping and data splitting utilities
-
-- `notebooks/`: Jupyter notebooks for experiments (see Notebook plan above)
-- `scripts/`: Standalone Python scripts for running experiments
-- `artifacts/`: Saved models, results, splits, and cached features
-- `data/`: Raw dataset directories (not tracked in git)
-
-### SpecKit Documentation Structure
-
-Following SpecKit methodology, all specifications, plans, and feature documentation are organized under `.specify/`:
-
-```
-.specify/
-├── memory/
-│   ├── constitution.md          # This file - project governing principles
-│   ├── technical_plan.md         # High-level technical roadmap
-│   └── tasks.md                  # Global task tracking
-├── scripts/
-│   └── [utility scripts for spec management]
-├── templates/
-│   ├── spec-template.md          # Template for feature specifications
-│   ├── plan-template.md          # Template for implementation plans
-│   ├── tasks-template.md         # Template for task breakdowns
-│   └── checklist-template.md     # Template for validation checklists
-└── specs/
-    ├── 001-validation-phase/
-    │   ├── spec.md               # Feature specification (what to build)
-    │   ├── plan.md               # Implementation plan (how to build)
-    │   ├── quickstart.md         # Quick start guide
-    │   ├── research.md           # Technical research and decisions
-    │   └── artifacts/            # Validation outputs, plots, analysis
-    ├── 002-phase1-critical-fixes/
-    │   ├── spec.md               # Class imbalance & normalization fixes
-    │   ├── plan.md               # Detailed implementation steps
-    │   ├── tasks.md              # Actionable task breakdown
-    │   ├── quickstart.md         # Immediate action guide
-    │   └── artifacts/            # Experiment results, checkpoints
-    └── 003-future-feature/
-        └── ...
-```
-
-### Specification Numbering Convention
-
-Features and experimental phases are numbered sequentially with descriptive names:
-- `001-validation-phase`: Initial model validation and root cause analysis
-- `002-phase1-critical-fixes`: Class weighting and feature normalization
-- `003-phase2-feature-engineering`: Mel-spectrograms and augmentation
-- `004-phase3-architecture-optimization`: Pretrained models and architecture search
-- `005-phase4-advanced-techniques`: Multi-modal fusion and ensembles
-
-Each specification directory contains:
-- **spec.md**: Functional requirements and user stories (tech-stack agnostic)
-- **plan.md**: Technical implementation plan with architecture decisions
-- **tasks.md**: Ordered task breakdown with dependencies and parallel execution markers
-- **quickstart.md**: Immediate action steps for starting implementation
-- **research.md**: Technical research, library versions, and design rationale
-- **artifacts/**: Experimental outputs, plots, checkpoints, analysis files
-
-### Document Organization Rules
-
-1. **Specifications First**: Write `spec.md` before `plan.md` - define what to build before how to build it
-2. **Clarify Before Planning**: Use clarification workflow to refine specs before creating technical plans
-3. **Tasks from Plans**: Generate `tasks.md` from validated `plan.md` with clear dependencies
-4. **Artifacts Co-located**: Keep experimental results with their corresponding spec for traceability
-5. **Version Control**: All spec documents are versioned; amendments documented in spec history section
+Explicitly address the dataset constraint: Image experiments on full CUB-200 vs. Image/Audio experiments on the 90-species intersection. This distinction must be clear to the reader to avoid confusion.
 
 ## Governance
 
-Constitution supersedes all other practices. Amendments require documentation and thoughtful consideration of impact on reproducibility and project structure.
+**Ratification Date**: 2025-12-03
+**Last Amended Date**: 2025-12-08
+**Constitution Version**: 2.0.0
 
-This constitution supersedes ad-hoc practices for this project. Amendments require:
+### Amendment Procedure
 
-1. A short proposal documenting the change and rationale.
-2. Review by project maintainers.
-3. Migration plan for affected notebooks, figures, and artifacts.
+Changes to this constitution require consensus from both Image and Audio teams.
 
-Compliance rules:
-- Complexity must be justified within the 4-page constraint.
-- Use `GUIDANCE.md` for runtime guidance and `README.md` for quickstart.
+### Versioning
 
-**Version**: 0.1.0 | **Ratified**: 2025-12-03 | **Last Amended**: 2025-12-03
-<!-- Initial version aligned to ICML 2025 short paper requirements -->
+Follows Semantic Versioning.
+
+- MAJOR: Phase shifts (e.g., Dev -> Paper).
+- MINOR: New principles or section additions.
+- PATCH: Clarifications and fixes.
+
+### Compliance
+
+- Automated: `pdflatex` compilation checks.
+- Manual: Peer review for tone, cohesion, and page limits.
+
+## Paper Production Workflow
+
+We are in the "Academic Paper Production" phase.
+
+**Primary Artifact**: `paper/example_paper.tex`
+
+**Team Roles**:
+
+- **Image Team**: Introduction, Related Work, Image Methodology/Results.
+- **Audio Team**: Audio Methodology, Audio Results, Future Fusion Strategy.
+
+**Key Context**:
+
+- **Title**: "Fine-Grained Audiovisual Categorization of Birds Using Popular Datasets"
+- **Template**: ICML 2025 LaTeX
+- **Constraint**: 8-10 pages
+
+**Execution Strategy**:
+
+1. **Drafting**: Fill missing sections (Audio/Fusion) using the provided technical reports.
+2. **Integration**: Merge sections ensuring consistent terminology and flow.
+3. **Validation**: Compile, check page count, review content against principles.
+4. **Refinement**: Polish language, improve figures, trim excess to fit limits.
+
+## Project Structure
+
+- `paper/`: The core workspace.
+  - `example_paper.tex`: The manuscript.
+  - `example_paper.bib`: References.
+  - `icml2025.sty`: Style file.
+- `artifacts/`: Source of truth for results (figures, tables).
+- `src/` & `notebooks/`: Reference implementation (frozen for paper consistency). Very important for network architecture
+- `specs/001` through `specs/004` have .md RESULTS which detail 
