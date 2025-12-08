@@ -28,6 +28,18 @@ speckitdlbird/
 │   └── utils/              # Utility functions
 │       ├── species.py      # Species name normalization
 │       └── splits.py       # Stratified split generation
+├── scripts/                # Executable scripts
+│   ├── verify_datasets.py  # Verify dataset paths
+│   ├── validate_data.py    # Validate data integrity
+│   └── ...
+├── tests/                  # Unit and integration tests
+│   ├── test_implementation.py
+│   ├── test_normalization.py
+│   └── ...
+├── specs/                  # Project specifications and plans
+│   ├── 001-validation-phase/
+│   ├── 002-phase1-critical-fixes/
+│   └── ...
 ├── notebooks/              # Jupyter notebooks
 │   ├── 00_env_setup.ipynb
 │   ├── 01_intersection.ipynb
